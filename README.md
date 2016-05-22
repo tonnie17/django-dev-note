@@ -1,5 +1,6 @@
 # Django开发日记
 
+
 * [环境](#环境)
 * [编码风格](#编码风格)
 * [项目结构](#项目结构)
@@ -30,6 +31,7 @@
 * [单元测试](#单元测试)
 * [版本控制](#版本控制)
 * [持续集成](#持续集成)
+* [进程管理](#进程管理)
 * [部署项目](#部署项目)
 
 
@@ -198,18 +200,23 @@ django内建引擎。
 **模版原则：**
 
 **1.减少在模版中数据的处理量**
+
 	尽量把数据处理交给后端处理，而不是在模版处理。
 
 **2.不要在模版中处理大量数据的过滤**
+
 	同上，应在后端使用queryset的filter方法进行过滤。
 
 **3.尽量使用queryset的内建方法**
+
 	当我们要统计一个queryset里面的数量时，应该使用`queryset.count()`，而不是python的`len(queryset)`或者模版的`{{ queryset|length }}`，因为前者的统计在数据库上进行操作，比后者快。
 
 **4.使用缓存**
+
 	使用Django内建的`'django.template.loaders.cached.Loader'`，能够大量地提高模版性能。
 
 **5.避免在模版中进行隐蔽查询**
+
 	先来看下面这段代码，它遍历用户列表（user_list由`User.objects.all()`产生）中的每个用户，并展示用户的出生日期，乍一看没什么问题，但这里实际上隐含了n+1问题，`user.profile.birth`在每次遍历中都进行了一次数据库查询，要解决这个问题也十分简单，只要用`select_related`操作把user关联的profile提前join取出来即可。
 
 ```
@@ -233,7 +240,7 @@ public/
 
 相应的，如果你想要指定了静态文件的目录，需要在settings中修改STATICFILES_DIRS的位置。
 
-要在模版中使用`{% static %}`标签，需要在模版的顶部加上`{% load staticfiles %}`以加载模版标签。
+要在模版中使用{% raw %}`{% static %}`{% endraw %}标签，需要在模版的顶部加上{% raw %}`{% load staticfiles %}`{% endraw %}以加载模版标签。
 
 静态资源的加速：
 
@@ -357,7 +364,7 @@ Admin使用原则：
 
 1. 使用`clean`或`clean_<field>`方法来验证表单字段。
 2. 当表单与model有耦合时，使用ModelForm。
-3. 不要忘记在模版中的`<form>`里添加`{% csrf_token %}`标签。
+3. 不要忘记在模版中的`<form>`里添加{% raw %}`{% csrf_token %}`{% endraw %}标签。
 4. 用`form.field.errors`代替自定义的错误显示。
 5. 用`form.is_valid()`来验证表单的合法性。
 6. 当ModelForm的模型涉及关联字段时，通过form.save(commit=False)来保存模型，再在模型上添加关联信息。
@@ -559,6 +566,12 @@ django自身包含了一些安全特性，如XSS，CSRF，SQL注入防护等。
 **jenkins**
 
 **travis**
+
+## 进程管理
+
+**supervisor**
+
+supervisor就是用Python开发的一套通用的进程管理程序，能将一个普通的命令行进程变为后台daemon，并监控进程状态，异常退出时能自动重启。
 
 ## 部署项目
 
