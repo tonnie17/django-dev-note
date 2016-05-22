@@ -240,7 +240,7 @@ public/
 
 相应的，如果你想要指定了静态文件的目录，需要在settings中修改STATICFILES_DIRS的位置。
 
-要在模版中使用{% raw %}`{% static %}`{% endraw %}标签，需要在模版的顶部加上{% raw %}`{% load staticfiles %}`{% endraw %}以加载模版标签。
+要在模版中使用`{% static %}`标签，需要在模版的顶部加上`{% load staticfiles %}`以加载模版标签。
 
 静态资源的加速：
 
@@ -364,7 +364,7 @@ Admin使用原则：
 
 1. 使用`clean`或`clean_<field>`方法来验证表单字段。
 2. 当表单与model有耦合时，使用ModelForm。
-3. 不要忘记在模版中的`<form>`里添加{% raw %}`{% csrf_token %}`{% endraw %}标签。
+3. 不要忘记在模版中的`<form>`里添加`{% csrf_token %}`标签。
 4. 用`form.field.errors`代替自定义的错误显示。
 5. 用`form.is_valid()`来验证表单的合法性。
 6. 当ModelForm的模型涉及关联字段时，通过form.save(commit=False)来保存模型，再在模型上添加关联信息。
